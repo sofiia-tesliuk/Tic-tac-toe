@@ -1,4 +1,4 @@
-from board import Board
+from gameboard import GameBoard
 from tree import GameOver
 from colored import fg, bg, attr
 
@@ -15,32 +15,52 @@ class Game:
         self._player_first = None
 
     def start_new_game(self):
+        """
+        Initialisation of the game.
+        Prints introduction.
+        Asks about being first player.
+        """
+        # Game introduction
         print(self.TITLE_STYLE.format('Tic-Tac-Toe!'))
         self._player_first = input("Do you want to be the first player? (Y/N): "
                                    ).strip().upper() == 'Y'
         self._player_char = self.CHARS[not self._player_first]
         print('Your char is: {}'.format(self._player_char))
         self._computer_char = self.CHARS[self._player_first]
-        self._board = Board(self._player_char, self._computer_char)
+        self._board = GameBoard()
 
     def _input_player_move(self):
+        """
+        :return: valid player input from possible next cells
+        """
         try:
             player_move = int(input('Enter number of cell: '))
             assert player_move in self._board.free_cells
+            return player_move
         except (TypeError, ValueError, AssertionError):
             print('Invalid number.')
             return self._input_player_move()
 
     def _print_board_state(self):
+        """
+        Prints visualisation of board
+        """
+        # Changes True -- computer_char
+        #         False -- player_char
         board_str = str(self._board). \
             replace('True', self._computer_char). \
             replace('False', self._player_char)
         print(self.BOARD_STYLE.format(board_str))
 
     def run(self):
+        """
+        Running game
+        """
         self._print_board_state()
+        # Player move, if first
         if self._player_first:
             self._board.player_move(self._input_player_move())
+            self._print_board_state()
         try:
             while True:
                 self._board.computer_move()
@@ -48,9 +68,12 @@ class Game:
                 self._board.player_move(self._input_player_move())
                 self._print_board_state()
         except GameOver as err:
-            self.game_over(err)
+            # Print result board
+            self._print_board_state()
+            self.game_over(str(err))
 
     def game_over(self, message):
+        # End of the game
         if message == 'Computer wins!':
             print('You lose!')
         elif message == 'Player wins!':
