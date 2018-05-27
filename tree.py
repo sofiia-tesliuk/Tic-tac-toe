@@ -17,8 +17,8 @@ class Tree:
             return self.points > other.points
 
     # ----- Tree -----
-    def __init__(self, root):
-        self._root = root
+    def __init__(self, state, last_move):
+        self._root = self.Tnode(state, last_move)
 
     def _next_states(self):
         def recurse(current_node):
@@ -42,9 +42,16 @@ class Tree:
         self._next_states()
         if self._root.next_states:
             top_score = max(self._root.next_states)
-            
+            best_states = list(filter(lambda x: x.points == top_score, self._root.next_states))
+            return random.choice(best_states).last_move
+        else:
+            if self._root.points == 1:
+                raise GameOver('Computer wins!')
+            elif self._root.points == -1:
+                raise GameOver('Player wins!')
+            else:
+                raise GameOver('No one wins.')
 
 
-
-class GameOver:
+class GameOver(Exception):
     pass

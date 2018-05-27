@@ -1,4 +1,5 @@
-from board import *
+from board import Board
+from tree import GameOver
 from colored import fg, bg, attr
 
 
@@ -46,11 +47,16 @@ class Game:
                 self._print_board_state()
                 self._board.player_move(self._input_player_move())
                 self._print_board_state()
-        except GameOver:
-            self.game_over()
+        except GameOver as err:
+            self.game_over(err)
 
-    def game_over(self):
-        pass
+    def game_over(self, message):
+        if message == 'Computer wins!':
+            print('You lose!')
+        elif message == 'Player wins!':
+            print('Congratulations! You win!')
+        else:
+            print(message)
 
 
 def main():

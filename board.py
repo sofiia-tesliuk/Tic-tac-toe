@@ -1,3 +1,6 @@
+from tree import Tree
+
+
 class Board:
     def __init__(self, state=[[None] * 3] * 3, last_move=(None, None)):
         self._state = state
@@ -15,10 +18,24 @@ class Board:
         self._last_move = (False, cell)
 
     def computer_move(self):
-        raise NotImplementedError
+        tree = Tree(self._state, self._last_move)
 
     def analyse_state(self):
-        raise NotImplementedError
+        # list of list of combinations
+        cells = [[(i, j) for j in range(3)] for i in range(3)]
+        cells += [[(j, i) for j in range(3)] for i in range(3)]
+        cells += [[(i, j) for j in [i, 3 - i]] for i in range(3)]
+        print('cells: {}'.format(cells))
+        for combination in cells:
+            value = set()
+            for i, j in combination:
+                value.add(self._state[i][j])
+            if len(value) == 1:
+                if value.pop() is True:
+                    return 1
+                elif value.pop() is False:
+                    return -1
+        return 0
 
     def __str__(self):
         """
