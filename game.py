@@ -16,7 +16,7 @@ class Game:
     def start_new_game(self):
         print(self.TITLE_STYLE.format('Tic-Tac-Toe!'))
         self._player_first = input("Do you want to be the first player? (Y/N): "
-                             ).strip().upper() == 'Y'
+                                   ).strip().upper() == 'Y'
         self._player_char = self.CHARS[not self._player_first]
         print('Your char is: {}'.format(self._player_char))
         self._computer_char = self.CHARS[self._player_first]
@@ -30,14 +30,22 @@ class Game:
             print('Invalid number.')
             return self._input_player_move()
 
+    def _print_board_state(self):
+        board_str = str(self._board). \
+            replace('True', self._computer_char). \
+            replace('False', self._player_char)
+        print(self.BOARD_STYLE.format(board_str))
+
     def run(self):
-        print(self.BOARD_STYLE.format(self._board))
+        self._print_board_state()
         if self._player_first:
             self._board.player_move(self._input_player_move())
         try:
             while True:
                 self._board.computer_move()
+                self._print_board_state()
                 self._board.player_move(self._input_player_move())
+                self._print_board_state()
         except GameOver:
             self.game_over()
 
