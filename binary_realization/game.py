@@ -1,12 +1,9 @@
 from gameboard import GameBoard
 from binary_realization.btree import GameOver
-from colored import fg, bg, attr
 
 
 class Game:
     CHARS = ['X', 'O']
-    TITLE_STYLE = "\n%s%s\t {}\t\t%s" % (fg(55), bg(189), attr(0))
-    BOARD_STYLE = '\n%s%s{}%s' % (fg(55), bg(231), attr(0))
 
     def __init__(self):
         self._player_char = None
@@ -21,7 +18,7 @@ class Game:
         Asks about being first player.
         """
         # Game introduction
-        print(self.TITLE_STYLE.format('Tic-Tac-Toe!'))
+        print('Tic-Tac-Toe!')
         self._player_first = input("Do you want to be the first player? (Y/N): "
                                    ).strip().upper() == 'Y'
         self._player_char = self.CHARS[not self._player_first]
@@ -50,7 +47,7 @@ class Game:
         board_str = str(self._board). \
             replace('True', self._computer_char). \
             replace('False', self._player_char)
-        print(self.BOARD_STYLE.format(board_str))
+        print(board_str)
 
     def run(self):
         """
