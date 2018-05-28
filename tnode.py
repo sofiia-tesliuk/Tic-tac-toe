@@ -20,4 +20,3 @@ class Tnode(BasicBoard):
 
     def __gt__(self, other):
         return self.points > other.points
-
